@@ -11,7 +11,7 @@
 </p>
 <p>
   <strong>사진:</strong>
-  <%= image_tag("#{@post.image}") %>
+  <%= image_tag("#{@post.image.detail}") %>
 </p>
 
 <%= link_to 'Edit', edit_post_path(@post) %> |

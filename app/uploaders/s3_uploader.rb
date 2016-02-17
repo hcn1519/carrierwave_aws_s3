@@ -17,6 +17,25 @@ class S3Uploader < CarrierWave::Uploader::Base
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
 
+  #상세
+  version :detail do
+    process :resize_to_fit => [600, 10000]
+  end
+  version :main do
+      process :resize_to_fill => [240, 180] ,:if => :horizontal?
+      process :resize_to_fill => [240, 320]  ,:if => :vertical?
+  end
+
+  def horizontal?(new_file)
+    image = MiniMagick::Image.open(self.file.file)
+    true if image[:height] < image[:width]
+  end
+  
+  def vertical?(new_file)
+    image = MiniMagick::Image.open(self.file.file)
+    true if image[:height] > image[:width]
+  end
+  
   # 요청한 이미지가 없을 때 대체해서 사용하는 default 이미지 설정
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
